@@ -1,0 +1,534 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="content-header mb-4">
+
+    <div class="card shadow border-0">
+
+        <div class="card-body">
+
+            <div class="row align-items-center">
+
+                <div class="col-md-8">
+
+                    <h2 class="mb-2">
+                     <span id="sapaan"></span>, Administrator
+                    </h2>
+
+                    <p class="text-muted mb-0">
+                        Selamat datang di <strong>SmartKasir</strong>. Gunakan menu di sebelah kiri untuk mengelola barang, transaksi, dan laporan penjualan.
+                    </p>
+                    <div class="mt-3">
+
+                         <span class="badge badge-primary p-2">
+
+                             <i class="far fa-clock"></i>
+
+                             <span id="jam"></span>
+
+                         </span>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-4 text-right">
+
+                    <i class="fas fa-cash-register fa-4x text-primary"></i>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="row">
+
+    <!-- Total Barang -->
+    <div class="col-lg-3 col-6">
+
+        <div class="small-box bg-primary">
+
+            <div class="inner">
+
+                <h3>{{ total_barang }}</h3>
+
+                <p>Total Barang</p>
+
+            </div>
+
+            <div class="icon">
+
+                <i class="fas fa-box"></i>
+
+            </div>
+
+            <a href="{{ url_for('barang.index') }}" class="small-box-footer">
+
+                Lihat Barang <i class="fas fa-arrow-circle-right"></i>
+
+            </a>
+
+        </div>
+
+    </div>
+
+    <!-- Total Transaksi -->
+    <div class="col-lg-3 col-6">
+
+        <div class="small-box bg-success">
+
+            <div class="inner">
+
+                <h3>{{ total_transaksi }}</h3>
+
+                <p>Total Transaksi</p>
+
+            </div>
+
+            <div class="icon">
+
+                <i class="fas fa-shopping-cart"></i>
+
+            </div>
+
+            <a href="{{ url_for('transaksi.index') }}" class="small-box-footer">
+
+                Lihat Transaksi <i class="fas fa-arrow-circle-right"></i>
+
+            </a>
+
+        </div>
+
+    </div>
+
+    <!-- Penjualan -->
+    <div class="col-lg-3 col-6">
+
+        <div class="small-box bg-warning">
+
+            <div class="inner">
+
+                <h3>Rp {{ "{:,}".format(total_penjualan).replace(",", ".") }}</h3>
+
+                <p>Total Penjualan</p>
+
+            </div>
+
+            <div class="icon">
+
+                <i class="fas fa-coins"></i>
+
+            </div>
+
+            <a href="{{ url_for('laporan.index') }}" class="small-box-footer">
+
+                Lihat Laporan <i class="fas fa-arrow-circle-right"></i>
+
+            </a>
+
+        </div>
+
+    </div>
+
+    <!-- Stok -->
+    <div class="col-lg-3 col-6">
+
+        <div class="small-box bg-danger">
+
+            <div class="inner">
+
+                <h3>{{ stok_menipis }}</h3>
+
+                <p>Stok Menipis</p>
+
+            </div>
+
+            <div class="icon">
+
+                <i class="fas fa-exclamation-triangle"></i>
+
+            </div>
+
+            <a href="{{ url_for('barang.index') }}" class="small-box-footer">
+
+                Cek Barang <i class="fas fa-arrow-circle-right"></i>
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="row">
+
+    <!-- Transaksi -->
+
+    <div class="col-md-7">
+
+        <div class="card shadow">
+
+            <div class="card-header bg-primary text-white">
+
+                <h3 class="card-title">
+
+                    <i class="fas fa-clock"></i>
+
+                    Transaksi Terbaru
+
+                </h3>
+
+            </div>
+
+            <div class="card-body p-0">
+
+                <table class="table table-hover">
+
+                    <thead>
+
+                    <tr>
+
+                        <th>Tanggal</th>
+
+                        <th>Barang</th>
+
+                        <th>Jumlah</th>
+
+                        <th>Total</th>
+
+                    </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                    {% if transaksi_terbaru %}
+
+                        {% for t in transaksi_terbaru %}
+
+                        <tr>
+
+                             <td>{{ t.tanggal.strftime('%d-%m-%Y') }}</td>
+
+                             <td>{{ t.barang.nama }}</td>
+
+                             <td>{{ t.jumlah }}</td>
+
+                            <td>
+                                Rp {{ "{:,}".format(t.total).replace(",", ".") }}
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    {% else %}
+
+                        <tr>
+
+                    <td colspan="4" class="text-center text-muted py-3">
+
+                     <i class="fas fa-info-circle"></i>
+                        Belum ada transaksi.
+
+                  </td>
+
+                  </tr>
+
+                    {% endif %}
+
+                </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Barang -->
+
+    <div class="col-md-5">
+
+        <div class="card shadow">
+
+            <div class="card-header bg-danger text-white">
+
+                <h3 class="card-title">
+
+                    <i class="fas fa-box-open"></i>
+
+                    Barang Stok Menipis
+
+                </h3>
+
+            </div>
+
+            <div class="card-body p-0">
+
+                <table class="table table-hover">
+
+                    <thead>
+
+                    <tr>
+
+                        <th>Barang</th>
+
+                        <th>Stok</th>
+
+                    </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                    {% for b in barang_menipis %}
+
+                    <tr>
+
+                        <td>{{ b.nama }}</td>
+
+                        <td>
+
+                            <span class="badge badge-danger">
+
+                                {{ b.stok }}
+
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Grafik Penjualan -->
+<div class="row mt-3">
+
+    <div class="col-md-8">
+
+        <div class="card shadow">
+
+            <div class="card-header bg-info text-white">
+
+                <h3 class="card-title">
+                    <i class="fas fa-chart-bar"></i>
+                    Grafik Penjualan Barang
+                </h3>
+
+            </div>
+
+            <div class="card-body">
+
+                {% if labels %}
+
+                <canvas id="grafikPenjualan" height="120"></canvas>
+
+                {% else %}
+
+                <div class="text-center text-muted">
+
+                    <i class="fas fa-chart-bar fa-3x mb-3"></i>
+
+                    <h5>Belum ada data penjualan</h5>
+
+                </div>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-4">
+
+        <div class="card shadow">
+
+            <div class="card-header bg-success text-white">
+
+                <h3 class="card-title">
+
+                    <i class="fas fa-lightbulb"></i>
+
+                    Ringkasan
+
+                </h3>
+
+            </div>
+
+            <div class="card-body">
+
+                <p>
+
+                    <strong>Total Barang</strong><br>
+
+                    {{ total_barang }}
+
+                </p>
+
+                <hr>
+
+                <p>
+
+                    <strong>Total Transaksi</strong><br>
+
+                    {{ total_transaksi }}
+
+                </p>
+
+                <hr>
+
+                <p>
+
+                    <strong>Total Penjualan</strong><br>
+
+                    Rp {{ "{:,}".format(total_penjualan).replace(",", ".") }}
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+{% if labels %}
+
+<script>
+
+const ctx = document.getElementById("grafikPenjualan");
+
+new Chart(ctx, {
+
+    type: "bar",
+
+    data: {
+
+        labels: {{ labels|tojson }},
+
+        datasets: [{
+
+            label: "Jumlah Terjual",
+
+            data: {{ data|tojson }}
+
+        }]
+
+    },
+
+    options: {
+
+        responsive: true,
+
+        plugins: {
+
+            legend: {
+
+                display: false
+
+            }
+
+        },
+
+        scales: {
+
+            y: {
+
+                beginAtZero: true
+
+            }
+
+        }
+
+    }
+
+});
+
+</script>
+<script>
+
+function updateJam(){
+
+    const sekarang = new Date();
+
+    document.getElementById("jam").innerHTML =
+        sekarang.toLocaleString("id-ID",{
+            weekday:"long",
+            year:"numeric",
+            month:"long",
+            day:"numeric",
+            hour:"2-digit",
+            minute:"2-digit",
+            second:"2-digit"
+        });
+
+}
+
+setInterval(updateJam,1000);
+
+updateJam();
+
+</script>
+<script>
+
+let jam = new Date().getHours();
+
+let sapaan="";
+
+if(jam<11){
+
+sapaan="🌅 Selamat Pagi";
+
+}
+
+else if(jam<15){
+
+sapaan="☀️ Selamat Siang";
+
+}
+
+else if(jam<18){
+
+sapaan="🌇 Selamat Sore";
+
+}
+
+else{
+
+sapaan="🌙 Selamat Malam";
+
+}
+
+document.getElementById("sapaan").innerHTML=sapaan;
+
+</script>
+
+{% endif %}
+
+{% endblock %}

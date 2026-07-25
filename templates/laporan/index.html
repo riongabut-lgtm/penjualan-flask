@@ -1,0 +1,261 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="card card-primary">
+
+    <div class="card-header">
+
+        <h3 class="card-title">
+
+            <i class="fas fa-chart-line"></i>
+
+            Laporan Penjualan
+
+        </h3>
+
+    </div>
+
+    <div class="card-body">
+
+        <!-- Filter -->
+
+        <form method="GET" class="row">
+
+            <div class="col-md-4">
+
+                <label>Tanggal Awal</label>
+
+                <input
+                    type="date"
+                    name="awal"
+                    value="{{ awal }}"
+                    class="form-control">
+
+            </div>
+
+            <div class="col-md-4">
+
+                <label>Tanggal Akhir</label>
+
+                <input
+                    type="date"
+                    name="akhir"
+                    value="{{ akhir }}"
+                    class="form-control">
+
+            </div>
+
+            <div class="col-md-4 d-flex align-items-end">
+
+                <button class="btn btn-primary mr-2">
+
+                    <i class="fas fa-search"></i>
+
+                    Filter
+
+                </button>
+
+                <a
+                    href="{{ url_for('laporan.index') }}"
+                    class="btn btn-secondary mr-2">
+
+                    <i class="fas fa-sync"></i>
+
+                    Reset
+
+                </a>
+
+                <a
+                    href="{{ url_for('laporan.pdf') }}"
+                    class="btn btn-danger">
+
+                    <i class="fas fa-file-pdf"></i>
+
+                    PDF
+
+                </a>
+
+            </div>
+
+        </form>
+
+        <hr>
+
+        <!-- Ringkasan -->
+
+        <div class="row">
+
+            <div class="col-md-4">
+
+                <div class="info-box bg-success">
+
+                    <span class="info-box-icon">
+
+                        <i class="fas fa-money-bill-wave"></i>
+
+                    </span>
+
+                    <div class="info-box-content">
+
+                        <span>Total Penjualan</span>
+
+                        <span class="info-box-number">
+
+                            Rp {{ "{:,}".format(total).replace(",", ".") }}
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <div class="info-box bg-primary">
+
+                    <span class="info-box-icon">
+
+                        <i class="fas fa-shopping-cart"></i>
+
+                    </span>
+
+                    <div class="info-box-content">
+
+                        <span>Total Transaksi</span>
+
+                        <span class="info-box-number">
+
+                            {{ transaksi|length }}
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <div class="info-box bg-warning">
+
+                    <span class="info-box-icon">
+
+                        <i class="fas fa-box"></i>
+
+                    </span>
+
+                    <div class="info-box-content">
+
+                        <span>Total Barang Terjual</span>
+
+                        <span class="info-box-number">
+
+                            {{ transaksi|sum(attribute='jumlah') }}
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <table
+            id="tabelLaporan"
+            class="table table-bordered table-hover">
+
+            <thead class="thead-dark">
+
+            <tr>
+
+                <th>No</th>
+
+                <th>Tanggal</th>
+
+                <th>Barang</th>
+
+                <th>Jumlah</th>
+
+                <th>Total</th>
+
+            </tr>
+
+            </thead>
+
+            <tbody>
+
+            {% for t in transaksi %}
+
+            <tr>
+
+                <td>{{ loop.index }}</td>
+
+                <td>{{ t.tanggal.strftime("%d-%m-%Y") }}</td>
+
+                <td>{{ t.barang.nama }}</td>
+
+                <td>{{ t.jumlah }}</td>
+
+                <td>
+
+                    Rp {{ "{:,}".format(t.total).replace(",", ".") }}
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<script>
+
+$(document).ready(function(){
+
+    $('#tabelLaporan').DataTable({
+
+        responsive:true,
+
+        pageLength:10,
+
+        autoWidth:false,
+
+        language:{
+
+            search:"🔍 Cari :",
+
+            lengthMenu:"Tampilkan _MENU_ data",
+
+            zeroRecords:"Data tidak ditemukan",
+
+            info:"Menampilkan _START_ - _END_ dari _TOTAL_ data",
+
+            paginate:{
+
+                previous:"←",
+
+                next:"→"
+
+            }
+
+        }
+
+    });
+
+});
+
+</script>
+
+{% endblock %}

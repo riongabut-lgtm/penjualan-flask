@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Edit Barang</h2>
+
+<form method="POST">
+
+<input
+name="kode"
+value="{{ barang.kode }}"
+class="form-control mb-3"
+required>
+
+<input
+name="nama"
+value="{{ barang.nama }}"
+class="form-control mb-3"
+required>
+
+<input
+type="number"
+name="harga"
+value="{{ barang.harga }}"
+class="form-control mb-3"
+required>
+
+<input
+type="number"
+name="stok"
+value="{{ barang.stok }}"
+class="form-control mb-3"
+required>
+
+<button class="btn btn-primary">
+
+Update
+
+</button>
+
+</form>
+
+{% endblock %}

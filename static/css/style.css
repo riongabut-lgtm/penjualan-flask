@@ -1,0 +1,363 @@
+/* ===============================
+   SMARTKASIR LOGIN PREMIUM
+================================== */
+
+/* Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    background:linear-gradient(-45deg,#2563eb,#1d4ed8,#3b82f6,#1e3a8a);
+    background-size:400% 400%;
+
+    animation:bgMove 12s ease infinite;
+}
+
+/* Background Animation */
+
+@keyframes bgMove{
+
+    0%{
+        background-position:0% 50%;
+    }
+
+    50%{
+        background-position:100% 50%;
+    }
+
+    100%{
+        background-position:0% 50%;
+    }
+
+}
+
+/* ===============================
+   CARD
+================================== */
+
+.login-card{
+
+    width:100%;
+    max-width:1050px;
+
+    overflow:hidden;
+
+    border:none;
+
+    border-radius:25px;
+
+    background:rgba(255,255,255,.95);
+
+    backdrop-filter:blur(20px);
+
+    box-shadow:0 25px 60px rgba(0,0,0,.25);
+
+    animation:fadeUp .8s ease;
+
+}
+
+/* ===============================
+   LEFT PANEL
+================================== */
+
+.left-panel{
+
+    background:linear-gradient(180deg,#2563eb,#1d4ed8);
+
+    color:#fff;
+
+    padding:60px 45px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+}
+
+.logo{
+
+    margin-bottom:25px;
+
+    text-align:center;
+
+}
+
+.logo i{
+
+    font-size:90px;
+
+    animation:float 3s ease-in-out infinite;
+
+}
+
+.left-panel h1{
+
+    text-align:center;
+
+    font-size:44px;
+
+    font-weight:700;
+
+    margin-bottom:10px;
+
+}
+
+.tagline{
+
+    text-align:center;
+
+    font-size:18px;
+
+    opacity:.9;
+
+    margin-bottom:25px;
+
+}
+
+.left-panel hr{
+
+    border-color:rgba(255,255,255,.25);
+
+}
+
+.feature-list{
+
+    list-style:none;
+
+    margin-top:20px;
+
+    padding:0;
+
+}
+
+.feature-list li{
+
+    font-size:17px;
+
+    margin-bottom:18px;
+
+}
+
+.feature-list i{
+
+    width:25px;
+
+    color:#7dd3fc;
+
+}
+
+/* ===============================
+   RIGHT PANEL
+================================== */
+
+.right-panel{
+
+    background:white;
+
+    padding:60px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+}
+
+.right-panel h2{
+
+    text-align:center;
+
+    color:#1f2937;
+
+    font-size:36px;
+
+    font-weight:700;
+
+    margin-bottom:35px;
+
+}
+
+/* ===============================
+   FORM
+================================== */
+
+label{
+
+    font-weight:600;
+
+    color:#374151;
+
+}
+
+.form-control{
+
+    height:52px;
+
+    border-radius:12px;
+
+    border:1px solid #d1d5db;
+
+    transition:.3s;
+
+}
+
+.form-control:hover{
+
+    border-color:#3b82f6;
+
+}
+
+.form-control:focus{
+
+    border-color:#2563eb;
+
+    box-shadow:0 0 0 .2rem rgba(37,99,235,.15);
+
+}
+
+/* ===============================
+   BUTTON
+================================== */
+
+.btn-primary{
+
+    width:100%;
+
+    height:52px;
+
+    margin-top:20px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#2563eb;
+
+    font-size:18px;
+
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+.btn-primary:hover{
+
+    background:#1d4ed8;
+
+    transform:translateY(-3px);
+
+    box-shadow:0 15px 25px rgba(37,99,235,.25);
+
+}
+
+.btn-primary:active{
+
+    transform:scale(.98);
+
+}
+
+/* ===============================
+   ANIMATION
+================================== */
+
+@keyframes fadeUp{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(40px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:none;
+
+    } 
+
+}
+
+@keyframes float{
+
+    0%,100%{
+
+        transform:translateY(0);
+
+    }
+
+    50%{
+
+        transform:translateY(-10px);
+
+    }
+
+}
+.small-box{
+
+    transition:.3s;
+
+}
+
+.small-box:hover{
+
+    transform:translateY(-5px);
+
+    box-shadow:0 10px 20px rgba(0,0,0,.2);
+
+}
+
+.card{
+
+    transition:.3s;
+
+}
+
+.card:hover{
+
+    transform:translateY(-3px);
+
+}
+
+/* ===============================
+   RESPONSIVE
+================================== */
+
+@media(max-width:768px){
+
+.left-panel{
+
+display:none;
+
+}
+
+.right-panel{
+
+padding:35px;
+
+}
+
+.right-panel h2{
+
+font-size:28px;
+
+}
+
+}

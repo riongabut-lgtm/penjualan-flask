@@ -1,0 +1,345 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="row">
+
+    <!-- FORM TRANSAKSI -->
+    <div class="col-lg-8">
+
+        <div class="card card-primary shadow">
+
+            <div class="card-header">
+
+                <h3 class="card-title">
+                    <i class="fas fa-shopping-cart"></i>
+                    Transaksi Penjualan
+                </h3>
+
+            </div>
+
+            <form method="POST">
+
+                <div class="card-body">
+
+                    <div class="form-group">
+
+                        <label>Pilih Barang</label>
+
+                        <select id="barang"
+                                name="barang"
+                                class="form-control"
+                                required>
+
+                            {% for b in barang %}
+
+                            <option
+                                value="{{ b.id }}"
+                                data-harga="{{ b.harga }}"
+                                data-stok="{{ b.stok }}"
+                                data-nama="{{ b.nama }}">
+
+                                {{ b.nama }} | Rp {{ "{:,}".format(b.harga).replace(",", ".") }}
+
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+
+                            <div class="form-group">
+
+                                <label>Harga</label>
+
+                                <input
+                                    id="harga"
+                                    class="form-control"
+                                    readonly>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <div class="form-group">
+
+                                <label>Stok</label>
+
+                                <input
+                                    id="stok"
+                                    class="form-control"
+                                    readonly>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>Jumlah</label>
+
+                        <input
+                            id="jumlah"
+                            name="jumlah"
+                            type="number"
+                            class="form-control"
+                            min="1"
+                            value="1"
+                            required>
+
+                    </div>
+
+                    <div id="peringatan"
+                         class="alert alert-danger d-none">
+
+                        <i class="fas fa-exclamation-triangle"></i>
+
+                        Jumlah melebihi stok yang tersedia.
+
+                    </div>
+
+                </div>
+
+                <div class="card-footer">
+
+                    <button id="btnSimpan"
+                            class="btn btn-success">
+
+                        <i class="fas fa-check-circle"></i>
+
+                        Proses Transaksi
+
+                    </button>
+
+                    <a href="{{ url_for('dashboard') }}"
+                       class="btn btn-secondary">
+
+                        <i class="fas fa-arrow-left"></i>
+
+                        Kembali
+
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <!-- RINGKASAN -->
+    <div class="col-lg-4">
+
+        <div class="card card-success shadow">
+
+            <div class="card-header">
+
+                <h3 class="card-title">
+
+                    Ringkasan Transaksi
+
+                </h3>
+
+            </div>
+
+            <div class="card-body">
+
+                <table class="table table-borderless">
+
+                    <tr>
+
+                        <td>Barang</td>
+
+                        <td class="text-right">
+
+                            <strong id="namaBarang"></strong>
+
+                        </td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td>Harga</td>
+
+                        <td class="text-right">
+
+                            <strong id="hargaRingkasan"></strong>
+
+                        </td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td>Stok</td>
+
+                        <td class="text-right">
+
+                            <span id="stokBadge"
+                                  class="badge badge-success">
+
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+                </table>
+
+                <hr>
+
+                <h5 class="text-center">
+
+                    TOTAL
+
+                </h5>
+
+                <h2 id="total"
+                    class="text-center text-success font-weight-bold">
+
+                    Rp 0
+
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+    <div class="card shadow mt-3">
+
+    <div class="card-header bg-secondary text-white">
+
+        <h3 class="card-title">
+
+            <i class="fas fa-calendar-day"></i>
+
+            Informasi Hari Ini
+
+        </h3>
+
+    </div>
+
+    <div class="card-body text-center">
+
+        <h5 id="tanggalHari"></h5>
+
+        <p class="text-muted">
+
+            Semoga aktivitas penjualan hari ini berjalan lancar.
+
+        </p>
+
+    </div>
+
+</div>
+
+</div>
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    function formatRupiah(nominal){
+
+        return "Rp " + Number(nominal).toLocaleString("id-ID");
+
+    }
+
+    function hitungTotal(){
+
+        const selected = $("#barang option:selected");
+
+        const harga = parseInt(selected.data("harga")) || 0;
+
+        const stok = parseInt(selected.data("stok")) || 0;
+
+        const nama = selected.data("nama") || "";
+
+        const jumlah = parseInt($("#jumlah").val()) || 0;
+
+        $("#harga").val(formatRupiah(harga));
+
+        $("#stok").val(stok);
+
+        $("#namaBarang").text(nama);
+
+        $("#hargaRingkasan").text(formatRupiah(harga));
+
+        $("#stokBadge").text(stok);
+
+        $("#total").text(formatRupiah(harga * jumlah));
+
+        if(stok <= 5){
+
+            $("#stokBadge")
+                .removeClass("badge-success")
+                .addClass("badge-danger");
+
+        }else{
+
+            $("#stokBadge")
+                .removeClass("badge-danger")
+                .addClass("badge-success");
+
+        }
+
+        if(jumlah > stok){
+
+            $("#peringatan").removeClass("d-none");
+
+            $("#btnSimpan").prop("disabled", true);
+
+        }else{
+
+            $("#peringatan").addClass("d-none");
+
+            $("#btnSimpan").prop("disabled", false);
+
+        }
+
+    }
+
+    $("#barang").change(hitungTotal);
+
+    $("#jumlah").on("input", hitungTotal);
+
+    hitungTotal();
+
+});
+
+</script>
+
+<script>
+
+document.addEventListener("DOMContentLoaded",function(){
+
+    document.getElementById("tanggalHari").innerHTML =
+    new Date().toLocaleDateString("id-ID",{
+
+        weekday:"long",
+
+        day:"numeric",
+
+        month:"long",
+
+        year:"numeric"
+
+    });
+
+});
+
+</script>
+
+{% endblock %}

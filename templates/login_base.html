@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartKasir - Login</title>
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
+
+    <style>
+        body{
+            background: linear-gradient(135deg,#2563eb,#1e40af);
+            min-height:100vh;
+        }
+
+        .login-card{
+            border-radius:20px;
+            overflow:hidden;
+            box-shadow:0 20px 40px rgba(0,0,0,.25);
+        }
+
+        .left-panel{
+            background:#1d4ed8;
+            color:white;
+            padding:50px;
+        }
+
+        .left-panel h1{
+            font-weight:bold;
+        }
+
+        .right-panel{
+            background:white;
+            padding:50px;
+        }
+
+        .logo{
+            font-size:70px;
+            margin-bottom:20px;
+        }
+    </style>
+</head>
+
+<body class="d-flex align-items-center justify-content-center">
+
+<div class="container">
+
+<div class="row justify-content-center">
+
+<div class="col-lg-9">
+
+<div class="card login-card">
+
+<div class="row no-gutters">
+
+<div class="col-md-6 left-panel">
+
+    <div class="logo">
+        <i class="fas fa-store"></i>
+    </div>
+
+    <h1>SmartKasir</h1>
+
+    <p class="tagline">
+        Modern Point of Sale System
+    </p>
+
+    <hr>
+
+    <ul class="feature-list">
+
+        <li>
+            <i class="fas fa-check-circle"></i>
+            Kelola Data Barang
+        </li>
+
+        <li>
+            <i class="fas fa-check-circle"></i>
+            Transaksi Cepat & Mudah
+        </li>
+
+        <li>
+            <i class="fas fa-check-circle"></i>
+            Laporan Otomatis
+        </li>
+
+        <li>
+            <i class="fas fa-check-circle"></i>
+            Export PDF
+        </li>
+
+    </ul>
+
+</div>
+
+<div class="col-md-6 right-panel">
+
+{% block content %}{% endblock %}
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</body>
+</html>

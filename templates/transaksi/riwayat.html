@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Riwayat Transaksi</h2>
+
+<table class="table table-bordered table-striped">
+
+<thead>
+
+<tr>
+
+<th>Tanggal</th>
+
+<th>Barang</th>
+
+<th>Harga</th>
+
+<th>Jumlah</th>
+
+<th>Total</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+{% for t in transaksi %}
+
+<tr>
+
+<td>{{ t.tanggal.strftime("%d-%m-%Y %H:%M") }}</td>
+
+<td>{{ t.barang.nama }}</td>
+
+<td>Rp {{ "{:,}".format(t.barang.harga).replace(",",".") }}</td>
+
+<td>{{ t.jumlah }}</td>
+
+<td>Rp {{ "{:,}".format(t.total).replace(",",".") }}</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+<a
+href="{{ url_for('transaksi.index') }}"
+class="btn btn-primary">
+
+Transaksi Baru
+
+</a>
+
+{% endblock %}
