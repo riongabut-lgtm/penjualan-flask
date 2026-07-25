@@ -3,6 +3,7 @@ from flask import render_template
 from flask import request
 from flask import redirect
 from flask import url_for
+from flask import flash
 
 from flask_login import login_user
 from flask_login import logout_user
@@ -14,9 +15,7 @@ from extensions import db
 auth = Blueprint(
     "auth",
     __name__
-)
-
-
+    )
 @auth.route("/login", methods=["GET", "POST"])
 def login():
 
@@ -29,13 +28,17 @@ def login():
             username=username
         ).first()
 
-        if user and user.password == password:
+        if user and user.check_password(password):
 
             login_user(user)
+
+            flash("Login berhasil. Selamat datang!", "success")
 
             return redirect(
                 url_for("dashboard")
             )
+
+        flash("Username atau password salah!", "danger")
 
     return render_template("login.html")
 

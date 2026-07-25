@@ -418,117 +418,141 @@
     </div>
 
 </div>
-{% if labels %}
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
 
 <script>
+document.addEventListener("DOMContentLoaded", function () {
 
-const ctx = document.getElementById("grafikPenjualan");
+    // ===============================
+    // JAM
+    // ===============================
 
-new Chart(ctx, {
+    function updateJam() {
+        const sekarang = new Date();
 
-    type: "bar",
+        const jam = document.getElementById("jam");
 
-    data: {
-
-        labels: {{ labels|tojson }},
-
-        datasets: [{
-
-            label: "Jumlah Terjual",
-
-            data: {{ data|tojson }}
-
-        }]
-
-    },
-
-    options: {
-
-        responsive: true,
-
-        plugins: {
-
-            legend: {
-
-                display: false
-
-            }
-
-        },
-
-        scales: {
-
-            y: {
-
-                beginAtZero: true
-
-            }
-
+        if (jam) {
+            jam.innerHTML = sekarang.toLocaleString("id-ID", {
+                weekday: "long",
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit"
+            });
         }
+    }
+
+    updateJam();
+    setInterval(updateJam, 1000);
+
+    // ===============================
+    // SAPAAN
+    // ===============================
+
+    const sapaan = document.getElementById("sapaan");
+
+    if (sapaan) {
+
+        const h = new Date().getHours();
+
+        if (h < 11)
+            sapaan.innerHTML = "🌅 Selamat Pagi";
+        else if (h < 15)
+            sapaan.innerHTML = "☀️ Selamat Siang";
+        else if (h < 18)
+            sapaan.innerHTML = "🌇 Selamat Sore";
+        else
+            sapaan.innerHTML = "🌙 Selamat Malam";
+    }
+
+    // ===============================
+    // GRAFIK PENJUALAN
+    // ===============================
+
+    const canvas = document.getElementById("grafikPenjualan");
+
+    if (canvas) {
+
+        new Chart(canvas, {
+
+            type: "bar",
+
+            data: {
+
+                labels: {{ labels|tojson }},
+
+                datasets: [{
+
+                    label: "Jumlah Terjual",
+
+                    data: {{ data|tojson }},
+
+                    backgroundColor: [
+                        "#007bff",
+                        "#28a745",
+                        "#ffc107",
+                        "#dc3545",
+                        "#17a2b8",
+                        "#6f42c1",
+                        "#fd7e14",
+                        "#20c997"
+                    ],
+
+                    borderRadius: 8,
+
+                    borderWidth: 1
+
+                }]
+
+            },
+
+            options: {
+
+                responsive: true,
+
+                maintainAspectRatio: false,
+
+                plugins: {
+
+                    legend: {
+
+                        display: false
+
+                    }
+
+                },
+
+                scales: {
+
+                    y: {
+
+                        beginAtZero: true,
+
+                        ticks: {
+
+                            precision: 0
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        });
 
     }
 
 });
-
 </script>
-<script>
-
-function updateJam(){
-
-    const sekarang = new Date();
-
-    document.getElementById("jam").innerHTML =
-        sekarang.toLocaleString("id-ID",{
-            weekday:"long",
-            year:"numeric",
-            month:"long",
-            day:"numeric",
-            hour:"2-digit",
-            minute:"2-digit",
-            second:"2-digit"
-        });
-
-}
-
-setInterval(updateJam,1000);
-
-updateJam();
-
-</script>
-<script>
-
-let jam = new Date().getHours();
-
-let sapaan="";
-
-if(jam<11){
-
-sapaan="🌅 Selamat Pagi";
-
-}
-
-else if(jam<15){
-
-sapaan="☀️ Selamat Siang";
-
-}
-
-else if(jam<18){
-
-sapaan="🌇 Selamat Sore";
-
-}
-
-else{
-
-sapaan="🌙 Selamat Malam";
-
-}
-
-document.getElementById("sapaan").innerHTML=sapaan;
-
-</script>
-
-{% endif %}
 
 {% endblock %}

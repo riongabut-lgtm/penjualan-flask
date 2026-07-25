@@ -1,6 +1,7 @@
 from flask import Flask, redirect, url_for, render_template
 from flask_login import login_required
 from sqlalchemy import func
+from flask_login import current_user
 
 from config import Config
 from extensions import db, login_manager
@@ -18,10 +19,13 @@ app.config.from_object(Config)
 db.init_app(app)
 login_manager.init_app(app)
 
+login_manager.login_view = "auth.login"
+login_manager.login_message = "Silakan login terlebih dahulu."
+login_manager.login_message_category = "warning"
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User.query.get(int(user_id))
+    return db.session.get(User, int(user_id))
 
 
 # ==========================
@@ -40,6 +44,10 @@ app.register_blueprint(laporan_bp)
 
 @app.route("/")
 def home():
+
+    if current_user.is_authenticated:
+        return redirect(url_for("dashboard"))
+
     return redirect(url_for("auth.login"))
 
 
@@ -95,9 +103,7 @@ def dashboard():
 
     labels = [item.nama_barang for item in grafik]
     data = [int(item.total_terjual or 0) for item in grafik]
-    
-    print(labels)
-    print(data)
+   
     return render_template(
         "dashboard.html",
         total_barang=total_barang,
@@ -118,15 +124,20 @@ with app.app_context():
 
     db.create_all()
 
-    if User.query.count() == 0:
+    if User.query.filter_by(username="admin").first() is None:
 
         admin = User(
-            username="admin",
-            password="admin123"
+        username="admin"
         )
+
+        admin.set_password("admin123")
 
         db.session.add(admin)
         db.session.commit()
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
+    
+@app.errorhandler(404)
+def not_found(error):
+    return render_template("404.html"), 404
